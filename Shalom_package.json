@@ -13,13 +13,19 @@
   "license": "ISC",
   "author": "S.Shalom IT23281196",
   "type": "commonjs",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "crypto": "^1.0.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mailtrap": "^4.0.0",
     "mongoose": "^8.12.1"
-  }
+  },
+  "devDependencies": {}
 }
