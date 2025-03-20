@@ -1,15 +1,57 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { assets } from "../assets/assets";
-import { useNavigate } from 'react-router-dom';
+import { data, useNavigate } from 'react-router-dom';
+import { AppContent } from "../context/AppContext";
+import axios from 'axios';
+import { toast } from "react-toastify";
 
 const Login = () => {
 
-    const navigate = useNavigate( )
+    const navigate = useNavigate()
+
+    const {backendUrl, setIsLoggedin, getUserData} = useContext(AppContent) // to get data from context (backend url)
   
     const [state, setState] = useState("Sign Up"); //initially it'll shows the sign up message
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
+    const onSubmitHandler = async (e)=>{
+      try {
+        e.preventDefault();
+
+        axios.defaults.withCredentials = true; // to send cookies with credentials
+
+        if(state === 'Sign Up'){
+
+          const {data} = await axios.post(backendUrl + '/api/auth/register', {name, email, password})
+
+          if (data.success){
+            setIsLoggedin(true)
+            getUserData()
+            navigate('/')
+          }
+          else{
+            toast.error(data.message);
+          }
+        }
+        else{
+          const {data} = await axios.post(backendUrl + '/api/auth/login', {email, password})
+
+          if (data.success){
+            setIsLoggedin(true)
+            getUserData()
+            navigate('/') //navigate to home page
+          }
+          else{
+            toast.error(data.message);
+          }
+
+        }
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
 
 
   return (
@@ -33,7 +75,7 @@ const Login = () => {
             : "Login to Your Account!"}
         </p>
 
-        <form action="">
+        <form onSubmit={onSubmitHandler}>
 
             {state === 'Sign Up' && (
             <div className="mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#333A5C]">
