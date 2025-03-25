@@ -65,12 +65,12 @@ const EmailVerify = () => {
   },[isLoggedin, userData]) // prevent user to enter into verification page again
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-300 to-purple-400">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[url('/bg_img.png')] bg-cover bg-center">
       <img
               onClick={()=>navigate('/')} //open home page
-              src={assets.logo}
+              src={assets.logo_tb2}
               alt=""
-              className="absolute left-5 sm:left-20 top-5 sm:w-32 cursor-pointer"
+              className="absolute left-5 sm:left-20 w-49 sm:w-60 top-5 cursor-pointer"
             />
 
       <form onSubmit={onSubmitHandler} className='bg-slate-900 p-8 rounded-lg shadow-lg w-96 text-sm'>
