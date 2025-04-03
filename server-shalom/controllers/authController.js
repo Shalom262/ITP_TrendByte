@@ -6,9 +6,9 @@ import transporter from '../config/nodemailer.js';
 
 // User registration controller function
 export const register = async (req, res)=>{
-    const {name, email, password} = req.body;
+    const {name, email, password, confirmpassword} = req.body;
 
-    if(!name || !email || !password){
+    if(!name || !email || !password || !confirmpassword ){
         return res.json({success: false, message: 'Missing Details'})
     }
 

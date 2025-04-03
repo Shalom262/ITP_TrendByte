@@ -11,10 +11,11 @@ const Login = () => {
 
     const {backendUrl, setIsLoggedin, getUserData} = useContext(AppContent) // to get data from context (backend url)
   
-    const [state, setState] = useState("Sign Up"); //initially it'll shows the sign up message
+    const [state, setState] = useState("Login"); //initially it'll shows the sign up message
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [confirmpassword, setConfirmPassword] = useState('')
 
     const onSubmitHandler = async (e)=>{
       try {
@@ -24,7 +25,7 @@ const Login = () => {
 
         if(state === 'Sign Up'){
 
-          const {data} = await axios.post(backendUrl + '/api/auth/register', {name, email, password})
+          const {data} = await axios.post(backendUrl + '/api/auth/register', {name, email, password, confirmpassword})
 
           if (data.success){
             setIsLoggedin(true)
@@ -110,6 +111,17 @@ const Login = () => {
                 type="password"
                 placeholder="Password" required/>
             </div>
+
+            <div className="mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#333A5C]">
+                <img src={assets.lock_icon} alt="" />
+                <input 
+                onChange={e => setConfirmPassword(e.target.value)}
+                value={confirmpassword}
+                className="bg-transparent outline-none"
+                type="password"
+                placeholder="Confirm Password" required/>
+            </div>
+            
 
             <p onClick={()=>navigate('/reset-password')} className="mb-4 text-indigo-500 cursor-pointer">Forgot Password?</p>
 
