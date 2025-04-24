@@ -32,7 +32,7 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-[#0d0c46] text-[#ff7cbd] shadow-lg">
+    <header className=" bg-slate-900  text-[#ff7cbd] shadow-lg">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         {/* Shop Name */}
         

@@ -1,18 +1,35 @@
 import User from "../models/user.model.js";
 import Jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 
 // Register a new user
 export const registerUser = async (req, res, next) => {
   const { username, email, mobile, address, password } = req.body;
 
-
-
-
   const newUser = new User({ username, email, mobile, address, password });
 
   try {
     await newUser.save();
-    res.status(201).json('User registered successfully');
+
+    // Send welcome email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      subject: "Welcome to TrendByte!",
+      text: `Hi ${username}, welcome to TrendByte!`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(201).json("User registered successfully");
   } catch (error) {
     next(error);
   }
@@ -24,15 +41,16 @@ export const signin = async (req, res, next) => {
 
   try {
     const validUser = await User.findOne({ email });
-    if (!validUser) return next(errorHandler(404, 'User not found'));
+    if (!validUser) return next(errorHandler(404, "User not found"));
 
-    if (password !== validUser.password) return next(errorHandler(401, 'Wrong Credentials!'));
+    if (password !== validUser.password)
+      return next(errorHandler(401, "Wrong Credentials!"));
 
     const token = Jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
 
     const { password: pass, ...rest } = validUser._doc;
     res
-      .cookie('access_token', token, { httpOnly: true })
+      .cookie("access_token", token, { httpOnly: true })
       .status(200)
       .json(rest);
   } catch (error) {
@@ -50,8 +68,6 @@ export const getAllUsers = async (req, res, next) => {
   }
 };
 
-
-
 // Get user by ID
 export const getUserById = async (req, res, next) => {
   try {
@@ -62,8 +78,6 @@ export const getUserById = async (req, res, next) => {
     next(err);
   }
 };
-
-
 
 // Update user details
 export const updateUser = async (req, res, next) => {
@@ -96,8 +110,8 @@ export const deleteUser = async (req, res, next) => {
 // Sign out user
 export const signOut = async (req, res, next) => {
   try {
-    res.clearCookie('access_token');
-    res.status(200).json('User has been logged out!');
+    res.clearCookie("access_token");
+    res.status(200).json("User has been logged out!");
   } catch (error) {
     next(error);
   }
