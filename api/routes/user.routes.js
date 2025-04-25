@@ -1,12 +1,12 @@
 import express from "express";
-import { registerUser, getAllUsers, getUserById, updateUser, deleteUser, signOut, sendOtp, resetPassword, signin } from "../controllers/user.controller.js";
+import { registerUser, signin, getAllUsers, getUserById, updateUser, deleteUser, signOut } from "../controllers/user.controller.js";
 
 const router = express.Router();
 
 // Register a new user
 router.post("/register", registerUser);
 
-
+// Sign in a user
 router.post("/signin", signin);
 
 // Get all users
@@ -27,12 +27,5 @@ router.delete("/user/:id", deleteUser);
 
 // Sign out user
 router.get("/signout", signOut);
-
-router.post("/send-otp", sendOtp);
-router.post("/reset-password", resetPassword);
-
-router.get("/test", (req, res) => {
-  res.status(200).json({ message: "Test route is working" });
-});
 
 export default router;

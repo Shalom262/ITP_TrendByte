@@ -3,7 +3,7 @@ import { FaFacebook, FaTwitter, FaInstagram, FaEnvelope, FaPhone } from "react-i
 
 export default function Footer(){
   return (
-    <footer className="bg-[#161A1D] text-[#F5F3F4] py-8 mt-18">
+    <footer className="bg-[#161A1D] text-[#F5F3F4] py-8 mt-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Quick Links */}

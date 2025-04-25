@@ -6,10 +6,7 @@ import {
   signInSuccess,
   signInFailure,
 } from "../redux/user/userSlice.js";
-
-import signin_bg3 from "../assets/signin_bg3.jpg"; // Import your background image
-import mail_icon from "../assets/mail_icon.svg"; // Import your person icon image
-import lock_icon from "../assets/lock_icon.svg"; // Import your person icon image
+import background from "../images/background.jpg";
 
 export default function UserLogin() {
   const [formData, setFormData] = useState({});
@@ -42,7 +39,7 @@ export default function UserLogin() {
 
       if (res.ok) {
         dispatch(signInSuccess(data));
-        navigate("/");
+        navigate("/"); 
       } else {
         dispatch(signInFailure(data.message || "Login failed"));
       }
@@ -52,78 +49,51 @@ export default function UserLogin() {
   };
 
   return (
-    <div
-      className="relative flex items-center justify-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url(${signin_bg3})` }}
-    >
-      <div className="absolute inset-0 bg-black opacity-50"></div>{" "}
-      {/* Dark overlay */}
-      <div className="relative z-10 bg-slate-900 p-10 rounded-lg shadow-lg w-full max-w-md text-indigo-300 text-sm">
-        <h1 className="text-4xl font-semibold text-center text-white mb-3">
-          Login
-        </h1>
-
-        <p className="text-center text-sm mb-6">Login to Your Account!</p>
-
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="flex items-center gap-5 px-5 py-3 rounded-full bg-[#333A5C]">
-            <img src={mail_icon} alt="" />
-            <input
-              type="email"
-              placeholder="Email ID"
-              className="bg-transparent outline-none"
-              id="email"
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="flex items-center gap-5 px-5 py-3 rounded-full bg-[#333A5C]">
-            <img src={lock_icon} alt="" />
-            <input
-              type="password"
-              placeholder="Password"
-              className="bg-transparent outline-none w-full text-white"
-              id="password"
-              onChange={handleChange}
-              required
-            />
-          </div>
-
+    <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${background})` }}>
+      <div className="absolute inset-0 bg-black opacity-50"></div> {/* Dark overlay */}
+      <div className="relative z-10 bg-white bg-opacity-80 p-10 rounded-lg shadow-lg w-full max-w-md">
+        <h1 className="text-4xl font-extrabold text-center text-red-600 mb-8">Sign In</h1>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <input
+            type="email"
+            placeholder="Email"
+            className="border-2 border-red-500 p-4 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-600"
+            id="email"
+            onChange={handleChange}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="border-2 border-red-500 p-4 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-600"
+            id="password"
+            onChange={handleChange}
+          />
           <button
             disabled={loading}
-            className={`w-full py-2 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-900 text-white font-medium ${
-              loading ? "opacity-70 cursor-not-allowed" : ""
-            } text-lg mt-2`}
+            style={{
+              color: "white",
+              padding: "0.75rem 2rem",
+              borderRadius: "9999px",
+              border: "none",
+              cursor: "pointer",
+            }}
+            className={`${
+              loading ? "opacity-80 cursor-not-allowed bg-red-400" : "bg-red-500 hover:bg-red-600"
+            } text-lg font-semibold mt-4 transition-all ease-in-out duration-200`}
           >
             {loading ? "Loading..." : "Sign In"}
           </button>
         </form>
-
-        {error && (
-          <p className="text-red-500 mt-4 text-center text-sm">{error}</p>
-        )}
-
-        {/* Forgot Password Link */}
-        <div className="mt-4 text-center">
-          <p className="text-gray-400">
-            Forgot your password?{" "}
-            <span
-              onClick={() => navigate("/forgot-password")}
-              className="text-blue-400 cursor-pointer underline"
-            >
-              Reset here
-            </span>
-          </p>
-        </div>
+        {error && <p className="text-red-500 mt-4 text-center text-lg">{error}</p>}
 
         {/* Register Page Link */}
         <div className="mt-4 text-center">
-          <p className="text-gray-400">
+          <p className="text-gray-600">
             Don't have an account?{" "}
             <span
               onClick={() => navigate("/register")}
-              className="text-blue-400 cursor-pointer underline"
+              className="text-red-600 cursor-pointer hover:underline"
             >
               Register here
             </span>
@@ -131,12 +101,12 @@ export default function UserLogin() {
         </div>
 
         {/* Employee Login Link */}
-        <div className="mt-2 text-center">
-          <p className="text-gray-400">
+        <div className="mt-4 text-center">
+          <p className="text-gray-600">
             Are you an employee?{" "}
             <span
               onClick={() => navigate("/employeeLogin")}
-              className="text-blue-400 cursor-pointer underline"
+              className="text-red-600 cursor-pointer hover:underline"
             >
               Employee Login
             </span>
