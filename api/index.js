@@ -45,6 +45,7 @@ app.use('/uploads', express.static(uploadsDir));
 console.log("Serving static files from:", uploadsDir);
 
 // Routes
+console.log("Registering user routes...");
 app.use('/api/users', userRouter);
 app.use('/api/employee', employeeRouter);
 app.use('/api/product', productRouter);
