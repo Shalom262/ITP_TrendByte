@@ -1,5 +1,4 @@
 import User from "../models/user.model.js";
-import Jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import Jwt from "jsonwebtoken";
 
