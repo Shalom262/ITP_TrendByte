@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import background from "../images/background.jpg";
+import mail_icon from "../assets/mail_icon.svg"; // Import your person icon image
+import lock_icon from "../assets/lock_icon.svg"; // Import your person icon image
+import person_icon from "../assets/person_icon.svg"; // Import your person icon image
+import signin_bg1 from "../assets/signin_bg1.jpg"; // Import your background image
+import signin_bg2 from "../assets/signin_bg2.jpg"; // Import your background image
+import signin_bg3 from "../assets/signin_bg3.jpg"; // Import your background image
+
 
 export default function UserRegister() {
   const [formData, setFormData] = useState({});
@@ -95,6 +102,7 @@ export default function UserRegister() {
           <div className="space-y-4">
             {/* Username */}
             <div className="flex items-center gap-3 px-4 py-3 rounded-full bg-[#333A5C]">
+              
               <input
                 type="text"
                 placeholder="Username"
@@ -107,6 +115,7 @@ export default function UserRegister() {
 
             {/* Mobile */}
             <div className="flex items-center gap-3 px-4 py-3 rounded-full bg-[#333A5C]">
+            
               <input
                 type="text"
                 placeholder="Mobile"
@@ -119,6 +128,7 @@ export default function UserRegister() {
 
             {/* Password */}
             <div className="flex items-center gap-3 px-4 py-3 rounded-full bg-[#333A5C]">
+            
               <input
                 type="password"
                 placeholder="Password"
@@ -137,6 +147,7 @@ export default function UserRegister() {
           <div className="space-y-4">
             {/* Email */}
             <div className="flex items-center gap-3 px-4 py-3 rounded-full bg-[#333A5C]">
+           
               <input
                 type="email"
                 placeholder="Email"
@@ -149,6 +160,7 @@ export default function UserRegister() {
 
             {/* Address */}
             <div className="flex items-center gap-3 px-4 py-3 rounded-full bg-[#333A5C]">
+             
               <input
                 type="text"
                 placeholder="Address"
@@ -161,6 +173,7 @@ export default function UserRegister() {
 
             {/* Confirm Password */}
             <div className="flex items-center gap-3 px-4 py-3 rounded-full bg-[#333A5C]">
+              
               <input
                 type="password"
                 placeholder="Confirm Password"

@@ -35,24 +35,60 @@ export const registerUser = async (req, res, next) => {
   }
 };
 
-// Sign in user
-export const signin = async (req, res, next) => {
-  const { email, password } = req.body;
+export const sendOtp = async (req, res, next) => {
+  const { email } = req.body;
 
   try {
-    const validUser = await User.findOne({ email });
-    if (!validUser) return next(errorHandler(404, "User not found"));
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json("User not found");
 
-    if (password !== validUser.password)
-      return next(errorHandler(401, "Wrong Credentials!"));
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiration = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
-    const token = Jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    user.otp = otp;
+    user.otpExpiration = otpExpiration;
+    await user.save();
 
-    const { password: pass, ...rest } = validUser._doc;
-    res
-      .cookie("access_token", token, { httpOnly: true })
-      .status(200)
-      .json(rest);
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      subject: "Password Reset OTP",
+      text: `Your OTP for password reset is: ${otp}`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json("OTP sent to your email");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resetPassword = async (req, res, next) => {
+  const { email, otp, newPassword } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json("User not found");
+
+    if (user.otp !== otp || user.otpExpiration < Date.now()) {
+      return res.status(400).json("Invalid or expired OTP");
+    }
+
+    user.password = newPassword;
+    user.otp = null;
+    user.otpExpiration = null;
+    await user.save();
+
+    res.status(200).json("Password reset successfully");
   } catch (error) {
     next(error);
   }

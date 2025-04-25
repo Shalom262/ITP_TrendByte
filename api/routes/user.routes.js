@@ -28,4 +28,7 @@ router.delete("/user/:id", deleteUser);
 // Sign out user
 router.get("/signout", signOut);
 
+router.post("/send-otp", sendOtp);
+router.post("/reset-password", resetPassword);
+
 export default router;
