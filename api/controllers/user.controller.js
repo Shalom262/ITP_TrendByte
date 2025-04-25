@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import Jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
+import Jwt from "jsonwebtoken";
 
 // Register a new user
 export const registerUser = async (req, res, next) => {
@@ -31,6 +32,28 @@ export const registerUser = async (req, res, next) => {
 
     res.status(201).json("User registered successfully");
   } catch (error) {
+    console.error("Error in sendOtp:", error);
+    res.status(500).json({ message: "Failed to send OTP. Please try again later." });
+  }
+};
+
+export const signin = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    if (user.password !== password) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    const token = Jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    res.status(200).json({ message: "Login successful", token });
+  } catch (error) {
     next(error);
   }
 };
@@ -39,7 +62,9 @@ export const sendOtp = async (req, res, next) => {
   const { email } = req.body;
 
   try {
+    console.log("Received request to send OTP for email:", email);
     const user = await User.findOne({ email });
+    console.log("User found:", user ? user.email : "No user found");
     if (!user) return res.status(404).json("User not found");
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -49,6 +74,7 @@ export const sendOtp = async (req, res, next) => {
     user.otpExpiration = otpExpiration;
     await user.save();
 
+    console.log("Generating OTP...");
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -64,7 +90,9 @@ export const sendOtp = async (req, res, next) => {
       text: `Your OTP for password reset is: ${otp}`,
     };
 
+    console.log("Sending email...");
     await transporter.sendMail(mailOptions);
+    console.log("Email sent successfully");
 
     res.status(200).json("OTP sent to your email");
   } catch (error) {

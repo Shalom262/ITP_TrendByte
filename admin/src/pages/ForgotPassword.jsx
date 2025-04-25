@@ -20,7 +20,7 @@ export default function ForgotPassword() {
 
       if (res.ok) {
         setMessage("OTP sent to your email");
-        setTimeout(() => navigate("/reset-password"), 2000);
+        navigate("/reset-password");
       } else {
         setMessage(data.message || "Failed to send OTP");
       }

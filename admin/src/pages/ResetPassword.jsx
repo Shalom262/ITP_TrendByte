@@ -13,7 +13,20 @@ export default function ResetPassword() {
     });
   };
 
+  const validatePassword = (password) => {
+    const strongPasswordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; // At least 8 characters, 1 letter, 1 number
+    return strongPasswordRegex.test(password);
+  };
+
   const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validatePassword(formData.newPassword)) {
+      return setMessage(
+        "Password must be at least 8 characters long and include both letters and numbers"
+      );
+    }
+
     e.preventDefault();
     try {
       const res = await fetch("/api/users/reset-password", {
