@@ -7,7 +7,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-    },
+  },
+  otp: {
+    type: String,
+    default: null,
+  },
+  otpExpiration: {
+    type: Date,
+    default: null,
+  },
     email: {
       type: String,
       required: true,

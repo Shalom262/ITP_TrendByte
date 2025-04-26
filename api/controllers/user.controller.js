@@ -40,7 +40,11 @@ export const signin = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
+    console.log("Reset password request received for email:", email);
+    console.log("Reset password request received for email:", email);
     const user = await User.findOne({ email });
+    console.log("User found:", user ? user.email : "No user found");
+    console.log("User found:", user ? user.email : "No user found");
     if (!user) return res.status(404).json({ message: "User not found" });
 
     if (user.password !== password) {
@@ -69,9 +73,13 @@ export const sendOtp = async (req, res, next) => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpExpiration = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
+    console.log("Generated OTP:", otp);
     user.otp = otp;
+    console.log("OTP expiration time:", otpExpiration);
     user.otpExpiration = otpExpiration;
+    console.log("Saving OTP to the database...");
     await user.save();
+    console.log("OTP saved successfully.");
 
     console.log("Generating OTP...");
     const transporter = nodemailer.createTransport({
@@ -103,20 +111,43 @@ export const resetPassword = async (req, res, next) => {
   const { email, otp, newPassword } = req.body;
 
   try {
+    // Find the user by email
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json("User not found");
-
-    if (user.otp !== otp || user.otpExpiration < Date.now()) {
-      return res.status(400).json("Invalid or expired OTP");
+    if (!user) {
+      console.error("User not found for email:", email);
+      return res.status(404).json("User not found");
     }
 
-    user.password = newPassword;
+    // Validate OTP
+    console.log("Validating OTP...");
+    if (user.otp !== otp) {
+      console.error("Invalid OTP for user:", email);
+      return res.status(400).json("Invalid OTP");
+    }
+
+    if (user.otpExpiration < Date.now()) {
+      console.error("Expired OTP for user:", email);
+      return res.status(400).json("Expired OTP");
+    }
+
+    // Hash the new password
+    console.log("Hashing new password...");
+    const bcrypt = await import("bcryptjs");
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+
+    // Clear OTP and expiration
     user.otp = null;
     user.otpExpiration = null;
+
+    // Save the updated user
+    console.log("Saving updated user...");
     await user.save();
 
+    console.log("Password reset successfully for user:", email);
     res.status(200).json("Password reset successfully");
   } catch (error) {
+    console.error("Error during password reset:", error);
     next(error);
   }
 };

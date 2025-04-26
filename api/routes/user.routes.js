@@ -29,7 +29,7 @@ router.delete("/user/:id", deleteUser);
 router.get("/signout", signOut);
 
 router.post("/send-otp", sendOtp);
-router.post("/reset-password", resetPassword);
+router.post("/users/reset-password", resetPassword);
 
 router.get("/test", (req, res) => {
   res.status(200).json({ message: "Test route is working" });
