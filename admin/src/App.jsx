@@ -106,6 +106,7 @@ function AppContent() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<UserLogin />} />
         <Route path="/register" element={<UserRegister />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/employeeLogin" element={<EmployeeLogin />} />
         <Route path="/product/:productId" element={<ProductView />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
