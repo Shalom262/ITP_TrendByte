@@ -217,3 +217,4 @@ export const getProductdetailsById = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch product details" });
   }
 };
+

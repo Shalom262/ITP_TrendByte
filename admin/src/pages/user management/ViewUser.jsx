@@ -154,6 +154,7 @@ export default function ViewUser() {
                     >
                       Delete
                     </button>
+                    {user.deleteRequest && <span className="ml-2 text-red-600">⚠️</span>}
                   </td>
                 </tr>
               ))}

@@ -36,118 +36,26 @@ export const registerUser = async (req, res, next) => {
   }
 };
 
+// Sign in user
 export const signin = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
-    console.log("Reset password request received for email:", email);
-    console.log("Reset password request received for email:", email);
-    const user = await User.findOne({ email });
-    console.log("User found:", user ? user.email : "No user found");
-    console.log("User found:", user ? user.email : "No user found");
-    if (!user) return res.status(404).json({ message: "User not found" });
-
-    if (user.password !== password) {
-      return res.status(400).json({ message: "Invalid credentials" });
+    const validUser = await User.findOne({ email });
+    if (!validUser) {
+      return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    const token = Jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    if (password !== validUser.password) return next(errorHandler(401, 'Wrong Credentials!'));
 
-    res.status(200).json({ message: "Login successful", token });
+    const token = Jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+
+    const { password: pass, ...rest } = validUser._doc;
+    res
+      .cookie('access_token', token, { httpOnly: true })
+      .status(200)
+      .json(rest);
   } catch (error) {
-    next(error);
-  }
-};
-
-export const sendOtp = async (req, res, next) => {
-  const { email } = req.body;
-
-  try {
-    console.log("Received request to send OTP for email:", email);
-    const user = await User.findOne({ email });
-    console.log("User found:", user ? user.email : "No user found");
-    if (!user) return res.status(404).json("User not found");
-
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpExpiration = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-
-    console.log("Generated OTP:", otp);
-    user.otp = otp;
-    console.log("OTP expiration time:", otpExpiration);
-    user.otpExpiration = otpExpiration;
-    console.log("Saving OTP to the database...");
-    await user.save();
-    console.log("OTP saved successfully.");
-
-    console.log("Generating OTP...");
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-
-    const mailOptions = {
-      from: process.env.SENDER_EMAIL,
-      to: email,
-      subject: "Password Reset OTP",
-      text: `Your OTP for password reset is: ${otp}`,
-    };
-
-    console.log("Sending email...");
-    await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully");
-
-    res.status(200).json("OTP sent to your email");
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const resetPassword = async (req, res, next) => {
-  const { email, otp, newPassword } = req.body;
-
-  try {
-    // Find the user by email
-    const user = await User.findOne({ email });
-    if (!user) {
-      console.error("User not found for email:", email);
-      return res.status(404).json("User not found");
-    }
-
-    // Validate OTP
-    console.log("Validating OTP...");
-    if (user.otp !== otp) {
-      console.error("Invalid OTP for user:", email);
-      return res.status(400).json("Invalid OTP");
-    }
-
-    if (user.otpExpiration < Date.now()) {
-      console.error("Expired OTP for user:", email);
-      return res.status(400).json("Expired OTP");
-    }
-
-    // Hash the new password
-    console.log("Hashing new password...");
-    const bcrypt = await import("bcryptjs");
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
-
-    // Clear OTP and expiration
-    user.otp = null;
-    user.otpExpiration = null;
-
-    // Save the updated user
-    console.log("Saving updated user...");
-    await user.save();
-
-    console.log("Password reset successfully for user:", email);
-    res.status(200).json("Password reset successfully");
-  } catch (error) {
-    console.error("Error during password reset:", error);
     next(error);
   }
 };
@@ -187,15 +95,19 @@ export const updateUser = async (req, res, next) => {
   }
 };
 
-// Delete a user
-export const deleteUser = async (req, res, next) => {
+// Request account deletion
+export const requestAccountDeletion = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const deletedUser = await User.findByIdAndDelete(id); // Delete the user by ID
-    if (!deletedUser) {
-      return res.status(404).json({ message: "User not found" });
+    const user = await User.findByIdAndUpdate(
+      id,
+      { $set: { deleteRequest: true } },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
     }
-    res.status(200).json({ message: "User deleted successfully" });
+    res.status(200).json({ success: true, message: "Delete request sent successfully" });
   } catch (error) {
     next(error);
   }
@@ -204,8 +116,22 @@ export const deleteUser = async (req, res, next) => {
 // Sign out user
 export const signOut = async (req, res, next) => {
   try {
-    res.clearCookie("access_token");
-    res.status(200).json("User has been logged out!");
+    res.clearCookie('access_token');
+    res.status(200).json('User has been logged out!');
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Delete a user
+export const deleteUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findByIdAndDelete(id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    res.status(200).json({ success: true, message: "User deleted successfully" });
   } catch (error) {
     next(error);
   }

@@ -104,7 +104,7 @@ export default function UserLogin() {
           <p className="text-red-500 mt-4 text-center text-sm">{error}</p>
         )}
 
-        {/* Forgot Password Link */}
+        {/* Forgot Password Link
         <div className="mt-4 text-center">
           <p className="text-gray-400">
             Forgot your password?{" "}
@@ -115,7 +115,7 @@ export default function UserLogin() {
               Reset here
             </span>
           </p>
-        </div>
+        </div> */}
 
         {/* Register Page Link */}
         <div className="mt-4 text-center">

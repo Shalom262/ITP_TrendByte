@@ -23,8 +23,6 @@ import CheckoutDetails from "./pages/payment management/CheckoutDetails.jsx";
 import ViewFeedback from "./pages/feedback management/ViewFeedback.jsx";
 import ProductView from "./pages/ProductView.jsx";
 import Footer from "./component/Footer.jsx";
-import ResetPassword from "./pages/ResetPassword.jsx"; // Import ResetPassword component
-import ForgotPassword from "./pages/ForgotPassword.jsx"; // Import ForgotPassword component
 
 export default function App() {
   return (
@@ -73,9 +71,7 @@ function AppContent() {
   // Function to check if the current route should hide the header
   const shouldHideHeader = () => {
     return hideHeaderRoutes.some((route) => {
-      const routePattern = new RegExp(
-        `^${route.replace(/:\w+/g, "[^/]+")}$` // Match dynamic segments correctly
-      );
+      const routePattern = new RegExp(`^${route.replace(/:\w+/g, "\\w+")}$`);
       return routePattern.test(location.pathname);
     });
   };
@@ -83,9 +79,7 @@ function AppContent() {
   // Function to check if the current route should hide the footer
   const shouldHideFooter = () => {
     return hideFooterRoutes.some((route) => {
-      const routePattern = new RegExp(
-        `^${route.replace(/:\w+/g, "[^/]+")}$` // Match dynamic segments correctly
-      );
+      const routePattern = new RegExp(`^${route.replace(/:\w+/g, "\\w+")}$`);
       return routePattern.test(location.pathname);
     });
   };
@@ -106,11 +100,8 @@ function AppContent() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<UserLogin />} />
         <Route path="/register" element={<UserRegister />} />
-        <Route path="/profile" element={<Profile />} />
         <Route path="/employeeLogin" element={<EmployeeLogin />} />
         <Route path="/product/:productId" element={<ProductView />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* Protected routes for employees */}
         <Route element={<PrivateRoute isLoggedIn={!!currentEmployee} />}>
