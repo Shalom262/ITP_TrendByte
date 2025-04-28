@@ -1,20 +1,38 @@
 import User from "../models/user.model.js";
+import nodemailer from "nodemailer";
 import Jwt from "jsonwebtoken";
 
 // Register a new user
 export const registerUser = async (req, res, next) => {
   const { username, email, mobile, address, password } = req.body;
 
-
-
-
   const newUser = new User({ username, email, mobile, address, password });
 
   try {
     await newUser.save();
-    res.status(201).json('User registered successfully');
+
+    // Send welcome email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      subject: "Welcome to TrendByte!",
+      text: `Hi ${username}, welcome to TrendByte!`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(201).json("User registered successfully");
   } catch (error) {
-    next(error);
+    console.error("Error in sendOtp:", error);
+    res.status(500).json({ message: "Failed to send OTP. Please try again later." });
   }
 };
 
@@ -24,14 +42,6 @@ export const signin = async (req, res, next) => {
 
   try {
     const validUser = await User.findOne({ email });
-<<<<<<< HEAD
-    if (!validUser) return next(errorHandler(404, 'User not found'));
-
-    if (password !== validUser.password) return next(errorHandler(401, 'Wrong Credentials!'));
-
-    const token = Jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
-
-=======
     if (!validUser) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
@@ -40,7 +50,6 @@ export const signin = async (req, res, next) => {
 
     const token = Jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
 
->>>>>>> Shalom
     const { password: pass, ...rest } = validUser._doc;
     res
       .cookie('access_token', token, { httpOnly: true })
@@ -61,8 +70,6 @@ export const getAllUsers = async (req, res, next) => {
   }
 };
 
-
-
 // Get user by ID
 export const getUserById = async (req, res, next) => {
   try {
@@ -73,8 +80,6 @@ export const getUserById = async (req, res, next) => {
     next(err);
   }
 };
-
-
 
 // Update user details
 export const updateUser = async (req, res, next) => {
@@ -117,8 +122,6 @@ export const signOut = async (req, res, next) => {
     next(error);
   }
 };
-<<<<<<< HEAD
-=======
 
 // Delete a user
 export const deleteUser = async (req, res, next) => {
@@ -133,4 +136,3 @@ export const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
->>>>>>> Shalom

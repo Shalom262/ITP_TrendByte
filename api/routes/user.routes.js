@@ -1,11 +1,7 @@
 import express from "express";
-<<<<<<< HEAD
-import { registerUser, signin, getAllUsers, getUserById, updateUser, deleteUser, signOut } from "../controllers/user.controller.js";
-=======
 // Re-enable requestAccountDeletion import
 // Fix import for deleteUser and requestAccountDeletion
 import { registerUser, signin, getAllUsers, getUserById, updateUser, signOut, requestAccountDeletion, deleteUser } from "../controllers/user.controller.js";
->>>>>>> Shalom
 
 const router = express.Router();
 
