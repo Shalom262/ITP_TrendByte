@@ -184,7 +184,25 @@ export default function Profile() {
         View Cart
       </button>
       <div className="flex justify-between mt-6">
-        <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">
+        <span
+          onClick={async () => {
+            const confirmDelete = window.confirm("Are you sure you want to delete your account?");
+            if (confirmDelete) {
+              try {
+                const res = await fetch(`/api/users/request-delete/${currentUser._id}`, { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                  alert("Delete request sent successfully!");
+                } else {
+                  alert("Failed to send delete request.");
+                }
+              } catch (error) {
+                alert("An error occurred while sending the delete request.");
+              }
+            }
+          }}
+          className="text-red-700 cursor-pointer"
+        >
           Delete Account
         </span>
         <span onClick={handleSignOut} className="text-red-700 cursor-pointer">

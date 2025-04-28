@@ -85,7 +85,27 @@ export default function UserLogin() {
             {loading ? "Loading..." : "Sign In"}
           </button>
         </form>
+<<<<<<< HEAD
         {error && <p className="text-red-500 mt-4 text-center text-lg">{error}</p>}
+=======
+
+        {error && (
+          <p className="text-red-500 mt-4 text-center text-sm">{error}</p>
+        )}
+
+        {/* Forgot Password Link
+        <div className="mt-4 text-center">
+          <p className="text-gray-400">
+            Forgot your password?{" "}
+            <span
+              onClick={() => navigate("/forgot-password")}
+              className="text-blue-400 cursor-pointer underline"
+            >
+              Reset here
+            </span>
+          </p>
+        </div> */}
+>>>>>>> Shalom
 
         {/* Register Page Link */}
         <div className="mt-4 text-center">

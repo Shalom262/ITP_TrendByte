@@ -7,6 +7,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      },
+    deleteRequest: {
+      type: Boolean,
+      default: false,
     },
     email: {
       type: String,

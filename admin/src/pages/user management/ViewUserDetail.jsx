@@ -109,6 +109,12 @@ export default function ViewUserDetail() {
             <div>
               <label className="text-sm font-medium text-[#161A1D]">Username</label>
               <p className="text-lg text-[#161A1D]">{user.username}</p>
+              </div>
+            <div>
+              <label className="text-sm font-medium text-[#161A1D]">Delete Request</label>
+              <p className="text-lg text-[#161A1D]">
+                {user.deleteRequest ? "Yes" : "No"}
+              </p>
             </div>
             <div>
               <label className="text-sm font-medium text-[#161A1D]">Email</label>
