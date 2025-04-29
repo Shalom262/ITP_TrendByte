@@ -1,105 +1,92 @@
 import React from "react";
-import { FaFacebook, FaTwitter, FaInstagram, FaEnvelope, FaPhone } from "react-icons/fa";
+import { 
+  FaFacebook, 
+  FaTwitter, 
+  FaInstagram, 
+  FaEnvelope, 
+  FaPhone, 
+  FaMapMarkerAlt 
+} from "react-icons/fa";
 
-export default function Footer(){
+export default function Footer() {
   return (
-    <footer className="bg-[#161A1D] text-[#F5F3F4] py-8 mt-18">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <footer className="bg-[#161A1D] text-[#F5F3F4] py-5">
+      <div className="container mx-auto px-4 text-sm">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Quick Links */}
-          <div>
-            <h3 className="text-xl font-bold mb-4">Quick Links</h3>
+          <div className="text-center md:text-left">
+            <h3 className="text-base font-semibold mb-3 uppercase tracking-wider">Quick Links</h3>
             <ul className="space-y-2">
-              <li>
-                <a href="/" className="hover:text-[#660708] transition-colors">
-                  Home
+              {["Home", "Shop", "About Us", "Contact Us", "Privacy Policy"].map((text, i) => (
+                <li key={i}>
+                  <a
+                    href={`/${text.toLowerCase().replace(/\s+/g, "")}`}
+                    className="hover:text-[#E63946] transition duration-150 text-sm"
+                  >
+                    {text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div className="text-center">
+            <h3 className="text-base font-semibold mb-3 uppercase tracking-wider">Contact Us</h3>
+            <ul className="space-y-2">
+              <li className="flex items-center justify-center md:justify-start gap-2">
+                <FaEnvelope className="text-[#E63946] text-sm" />
+                <a
+                  href="mailto:info@clothingstore.com"
+                  className="hover:text-[#E63946] transition text-sm"
+                >
+                  trendbyte4clothing@gmail.com
                 </a>
               </li>
-              <li>
-                <a href="/shop" className="hover:text-[#660708] transition-colors">
-                  Shop
+              <li className="flex items-center justify-center md:justify-start gap-2">
+                <FaPhone className="text-[#E63946] text-sm" />
+                <a
+                  href="tel:+1234567890"
+                  className="hover:text-[#E63946] transition text-sm"
+                >
+                  +94 123 456 789
                 </a>
               </li>
-              <li>
-                <a href="/about" className="hover:text-[#660708] transition-colors">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="/contact" className="hover:text-[#660708] transition-colors">
-                  Contact Us
-                </a>
-              </li>
-              <li>
-                <a href="/privacy" className="hover:text-[#660708] transition-colors">
-                  Privacy Policy
-                </a>
+              <li className="flex items-center justify-center md:justify-start gap-2">
+                <FaMapMarkerAlt className="text-[#E63946] text-sm" />
+                <p className="text-sm">123 Fashion St, Malabe, Colombo</p>
               </li>
             </ul>
           </div>
 
-          {/* Contact Information */}
-          <div>
-            <h3 className="text-xl font-bold mb-4">Contact Us</h3>
-            <ul className="space-y-2">
-              <li className="flex items-center">
-                <FaEnvelope className="mr-2" />
-                <a href="mailto:info@clothingstore.com" className="hover:text-[#660708] transition-colors">
-                  info@clothingstore.com
+          {/* Social Links */}
+          <div className="text-center md:text-right">
+            <h3 className="text-base font-semibold mb-3 uppercase tracking-wider">Follow Us</h3>
+            <div className="flex justify-center md:justify-end space-x-4">
+              {[
+                { icon: <FaFacebook />, link: "https://facebook.com" },
+                { icon: <FaTwitter />, link: "https://twitter.com" },
+                { icon: <FaInstagram />, link: "https://instagram.com" },
+              ].map((social, i) => (
+                <a
+                  key={i}
+                  href={social.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#E63946] transition text-base"
+                >
+                  {React.cloneElement(social.icon, { size: 18 })}
                 </a>
-              </li>
-              <li className="flex items-center">
-                <FaPhone className="mr-2" />
-                <a href="tel:+1234567890" className="hover:text-[#660708] transition-colors">
-                  +1 (234) 567-890
-                </a>
-              </li>
-              <li>
-                <p>123 Fashion Street, Style City, SC 12345</p>
-              </li>
-            </ul>
-          </div>
-
-          {/* Social Media Links */}
-          <div>
-            <h3 className="text-xl font-bold mb-4">Follow Us</h3>
-            <div className="flex space-x-4">
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[#660708] transition-colors"
-              >
-                <FaFacebook size={24} />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[#660708] transition-colors"
-              >
-                <FaTwitter size={24} />
-              </a>
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[#660708] transition-colors"
-              >
-                <FaInstagram size={24} />
-              </a>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Copyright Notice */}
-        <div className="border-t border-[#660708] mt-8 pt-4 text-center">
-          <p className="text-sm">
-            &copy; {new Date().getFullYear()} Clothing Store. All rights reserved.
-          </p>
+        {/* Copyright */}
+        <div className="border-t border-[#660708] mt-5 pt-3 text-center text-xs opacity-80">
+          &copy; {new Date().getFullYear()} Clothing Store. All rights reserved.
         </div>
       </div>
     </footer>
   );
-};
-
+}

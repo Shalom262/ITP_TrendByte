@@ -8,7 +8,6 @@ import signin_bg1 from "../assets/signin_bg1.jpg"; // Import your background ima
 import signin_bg2 from "../assets/signin_bg2.jpg"; // Import your background image
 import signin_bg3 from "../assets/signin_bg3.jpg"; // Import your background image
 
-
 export default function UserRegister() {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
@@ -85,12 +84,11 @@ export default function UserRegister() {
   return (
     <div
       className="relative flex items-center justify-center min-h-screen py-16 bg-cover bg-center"
-      style={{ backgroundImage: `url(${background})` }}
+      style={{ backgroundImage: `url(${signin_bg2})` }}
     >
       <div className="absolute inset-0 bg-black opacity-50"></div>{" "}
       {/* Dark overlay */}
       <div className="relative z-10 bg-slate-900 p-10 rounded-lg shadow-lg w-full max-w-[700px] text-indigo-300 text-sm">
-
         <h1 className="text-4xl font-semibold text-center text-white mb-3">
           Sign Up
         </h1>
@@ -102,7 +100,6 @@ export default function UserRegister() {
           <div className="space-y-4">
             {/* Username */}
             <div className="flex items-center gap-3 px-4 py-3 rounded-full bg-[#333A5C]">
-              
               <input
                 type="text"
                 placeholder="Username"
@@ -115,7 +112,6 @@ export default function UserRegister() {
 
             {/* Mobile */}
             <div className="flex items-center gap-3 px-4 py-3 rounded-full bg-[#333A5C]">
-            
               <input
                 type="text"
                 placeholder="Mobile"
@@ -128,7 +124,6 @@ export default function UserRegister() {
 
             {/* Password */}
             <div className="flex items-center gap-3 px-4 py-3 rounded-full bg-[#333A5C]">
-            
               <input
                 type="password"
                 placeholder="Password"
@@ -147,7 +142,6 @@ export default function UserRegister() {
           <div className="space-y-4">
             {/* Email */}
             <div className="flex items-center gap-3 px-4 py-3 rounded-full bg-[#333A5C]">
-           
               <input
                 type="email"
                 placeholder="Email"
@@ -160,7 +154,6 @@ export default function UserRegister() {
 
             {/* Address */}
             <div className="flex items-center gap-3 px-4 py-3 rounded-full bg-[#333A5C]">
-             
               <input
                 type="text"
                 placeholder="Address"
@@ -173,7 +166,6 @@ export default function UserRegister() {
 
             {/* Confirm Password */}
             <div className="flex items-center gap-3 px-4 py-3 rounded-full bg-[#333A5C]">
-              
               <input
                 type="password"
                 placeholder="Confirm Password"
@@ -189,7 +181,7 @@ export default function UserRegister() {
           </div>
 
           {/* Submit Button - Full Width Below Grid */}
-          <div className="col-span-2 flex justify-center" >
+          <div className="col-span-2 flex justify-center">
             <button
               disabled={loading}
               className={`w-60 py-2 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-900 text-white font-medium ${
