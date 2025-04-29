@@ -95,31 +95,50 @@ export default function Home() {
   }
 
   return (
-    <div className="bg-[#F5F3F4] min-h-screen">
+    <div className="bg-[#d7dfed] min-h-screen">
       <div className="p-8">
         <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mb-8">
+          {/* Search Bar */}
           <div className="relative w-full sm:w-1/3">
             <input
               type="text"
-              placeholder="Search products..."
+              placeholder="🔍 Search products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-3 border border-[#660708] rounded-xl shadow-sm focus:outline-none focus:ring-[#660708] focus:border-[#660708] bg-white/80 text-[#161A1D]"
+              className="w-full px-4 py-3 border border-gray-300 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-[#660708] focus:border-[#660708] bg-white text-gray-800 placeholder-gray-500"
             />
           </div>
 
+          {/* Category Dropdown */}
           <div className="relative w-full sm:w-1/4">
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full px-4 py-3 border border-[#660708] rounded-xl shadow-sm focus:outline-none focus:ring-[#660708] focus:border-[#660708] bg-white/80 text-[#161A1D]"
+              className="w-full px-4 py-3 border border-gray-300 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-[#660708] focus:border-[#660708] bg-white text-gray-800 appearance-none"
             >
-              <option value="All">All</option>
+              <option value="All">All Categories</option>
               <option value="Men">Men</option>
               <option value="Women">Women</option>
               <option value="Kid">Kid</option>
               <option value="Accessories">Accessories</option>
             </select>
+            {/* Custom dropdown arrow */}
+            <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+              <svg
+                className="w-4 h-4 text-gray-500"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
           </div>
         </div>
 

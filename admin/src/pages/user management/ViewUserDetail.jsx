@@ -2,16 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { employeeLogout } from "../../redux/employee/employeeSlice";
+import { FiArrowLeft, FiUser, FiMail, FiPhone, FiHome, FiTrash2, FiLogOut } from "react-icons/fi";
+
 
 export default function ViewUserDetail() {
-  const { id } = useParams(); // Get the userId from the URL
-  const [user, setUser] = useState(null); // State to store the user details
-  const [loading, setLoading] = useState(true); // State to manage loading state
-  const [error, setError] = useState(null); // State to handle errors
+  const { id } = useParams();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Fetch user details from the backend
   useEffect(() => {
     const fetchUserDetails = async () => {
       if (!id) {
@@ -21,112 +22,143 @@ export default function ViewUserDetail() {
       }
 
       try {
-        console.log("Fetching user details for ID:", id); // Debugging
         const response = await fetch(`/api/users/user/${id}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch user details");
-        }
+        if (!response.ok) throw new Error("Failed to fetch user details");
         const data = await response.json();
-        console.log("User data:", data); // Debugging
-        setUser(data); // Set the fetched user details to state
-        setLoading(false); // Set loading to false
+        setUser(data);
+        setLoading(false);
       } catch (err) {
-        console.error("Error fetching user details:", err); // Debugging
-        setError(err.message); // Set error message
-        setLoading(false); // Set loading to false
+        setError(err.message);
+        setLoading(false);
       }
     };
 
     fetchUserDetails();
-  }, [id]); // Add userId to the dependency array
+  }, [id]);
 
-  // Handle back to users list
-  const handleBack = () => {
-    navigate("/viewuser"); // Navigate back to the users list page
-  };
-
-  // Handle sign out
+  const handleBack = () => navigate("/viewuser");
+  
   const handleSignOut = () => {
-    // Clear the token from localStorage
     localStorage.removeItem("token");
-
-    // Dispatch the employee logout action
     dispatch(employeeLogout());
-
-    // Navigate to the employee login page
     navigate("/employeeLogin");
   };
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="text-lg font-semibold text-[#161A1D]">Loading...</div>
+      <div className="flex justify-center items-center h-screen bg-gray-50">
+        
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="text-lg font-semibold text-[#660708]">Error: {error}</div>
+      <div className="flex justify-center items-center h-screen bg-gray-50">
+        <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full text-center">
+          <div className="text-red-500 text-lg font-medium mb-2">Error</div>
+          <div className="text-gray-600">{error}</div>
+          <button
+            onClick={handleBack}
+            className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition"
+          >
+            Back to Users
+          </button>
+        </div>
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="text-lg font-semibold text-[#161A1D]">User not found</div>
+      <div className="flex justify-center items-center h-screen bg-gray-50">
+        <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full text-center">
+          <div className="text-lg font-medium mb-2">User Not Found</div>
+          <button
+            onClick={handleBack}
+            className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition"
+          >
+            Back to Users
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F3F4]">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-[#161A1D] shadow-lg">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-[#F5F3F4]">Employee Dashboard</h1>
+      <header className="bg-gradient-to-r from-indigo-700 to-indigo-600 shadow-lg">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <button
+            onClick={handleBack}
+            className="flex items-center text-white hover:text-gray-200 transition"
+          >
+            <FiArrowLeft className="mr-2" /> Back to Users
+          </button>
+          <h1 className="text-xl font-bold text-white">Employee Dashboard</h1>
           <button
             onClick={handleSignOut}
-            className="bg-[#660708] text-[#F5F3F4] px-6 py-2 rounded-lg hover:bg-[#7A0B0B] focus:outline-none focus:ring-2 focus:ring-[#660708] focus:ring-offset-2 transition-all"
+            className="flex items-center bg-white text-indigo-700 px-4 py-1 rounded-lg hover:bg-gray-100 transition text-sm font-medium"
           >
-            Sign Out
+            <FiLogOut className="mr-1.5" /> Sign Out
           </button>
         </div>
       </header>
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-extrabold text-[#161A1D] mb-6">User Details</h1>
+        <div className="max-w-2xl mx-auto">
+          <h1 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+            <FiUser className="mr-2 text-indigo-600" /> User Details
+          </h1>
 
-        {/* Back button */}
-        
-
-        {/* User details card */}
-        <div className="bg-white rounded-xl shadow-lg p-6 max-w-2xl mx-auto">
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium text-[#161A1D]">Username</label>
-              <p className="text-lg text-[#161A1D]">{user.username}</p>
+          {/* User details card */}
+          <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
+            <div className="p-6 space-y-6">
+              {/* Username */}
+              <div className="space-y-1">
+                <div className="text-xs font-medium text-gray-500 uppercase tracking-wider">Username</div>
+                <div className="text-lg text-gray-800">{user.username}</div>
               </div>
-            <div>
-              <label className="text-sm font-medium text-[#161A1D]">Delete Request</label>
-              <p className="text-lg text-[#161A1D]">
-                {user.deleteRequest ? "Yes" : "No"}
-              </p>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-[#161A1D]">Email</label>
-              <p className="text-lg text-[#161A1D]">{user.email}</p>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-[#161A1D]">Mobile</label>
-              <p className="text-lg text-[#161A1D]">{user.mobile}</p>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-[#161A1D]">Address</label>
-              <p className="text-lg text-[#161A1D]">{user.address}</p>
+
+              {/* Email */}
+              <div className="space-y-1">
+                <div className="text-xs font-medium text-gray-500 uppercase tracking-wider flex items-center">
+                  <FiMail className="mr-2 text-indigo-500" /> Email
+                </div>
+                <div className="text-lg text-gray-800">{user.email}</div>
+              </div>
+
+              {/* Mobile */}
+              <div className="space-y-1">
+                <div className="text-xs font-medium text-gray-500 uppercase tracking-wider flex items-center">
+                  <FiPhone className="mr-2 text-indigo-500" /> Mobile
+                </div>
+                <div className="text-lg text-gray-800">{user.mobile || "Not provided"}</div>
+              </div>
+
+              {/* Address */}
+              <div className="space-y-1">
+                <div className="text-xs font-medium text-gray-500 uppercase tracking-wider flex items-center">
+                  <FiHome className="mr-2 text-indigo-500" /> Address
+                </div>
+                <div className="text-lg text-gray-800">{user.address || "Not provided"}</div>
+              </div>
+
+              {/* Delete Request */}
+              <div className="space-y-1">
+                <div className="text-xs font-medium text-gray-500 uppercase tracking-wider flex items-center">
+                  <FiTrash2 className="mr-2 text-indigo-500" /> Delete Request
+                </div>
+                <div className="text-lg text-gray-800">
+                  {user.deleteRequest ? (
+                    <span className="text-red-600">Yes</span>
+                  ) : (
+                    <span className="text-green-600">No</span>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
