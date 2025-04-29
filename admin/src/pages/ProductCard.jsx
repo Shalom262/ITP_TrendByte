@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
 function ProductCard({ product, onAddToCart }) {
   const [quantity, setQuantity] = useState(1);
@@ -59,5 +60,15 @@ function ProductCard({ product, onAddToCart }) {
     </div>
   );
 }
+ProductCard.propTypes = {
+  product: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    productName: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    image: PropTypes.string.isRequired,
+  }).isRequired,
+  onAddToCart: PropTypes.func.isRequired,
+};
 
 export default ProductCard;
+
